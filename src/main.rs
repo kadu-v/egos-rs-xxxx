@@ -1,27 +1,26 @@
 #![no_main]
 #![no_std]
 
-use core::arch::asm;
+extern crate alloc;
+
+use alloc::boxed::Box;
 use core::panic::PanicInfo;
+use egos_rs_xxxx::malloc::init_allocator;
 use egos_rs_xxxx::{print, println};
 
 #[panic_handler]
 #[inline(never)]
 fn panic(_panic: &PanicInfo<'_>) -> ! {
-    loop {}
-}
-
-#[unsafe(no_mangle)]
-#[unsafe(link_section = ".text.enter")]
-pub unsafe extern "C" fn _start() -> ! {
-    unsafe {
-        asm!("la sp, __heap_end", "call main");
-    }
+    println!("Panic occurred: {:?}", _panic);
     loop {}
 }
 
 #[unsafe(no_mangle)]
 pub extern "C" fn main() -> ! {
+    init_allocator().expect("Failed to initialize allocator");
+
+    let b = Box::new(42);
+    print!("Boxed value: {}\n", b);
     print!("Hello, world!");
     println!("This is a test of the println macro.");
 
