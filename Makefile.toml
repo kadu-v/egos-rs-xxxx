@@ -1,8 +1,11 @@
 [env]
 QEMU = "qemu-system-riscv32"
+OBJDUMP = "riscv64-unknown-elf-objdump"
+OBJCOPY = "riscv64-unknown-elf-objcopy"
 TARGET = "riscv32imafc-unknown-none-elf"
 BINARY_NAME = "egos-rs-xxxx"
 BUILD_DIR = "target/${TARGET}/release"
+DEBUG_FLAGS = "--source --all-headers --demangle --line-numbers --wide"
 
 [tasks.build]
 command = "cargo"
@@ -11,13 +14,13 @@ args = ["build", "--release"]
 [tasks.objcopy]
 dependencies = ["build"]
 script = '''
-rust-objcopy -O binary ${BUILD_DIR}/${BINARY_NAME} ${BUILD_DIR}/${BINARY_NAME}.bin
+${OBJCOPY} -O binary ${BUILD_DIR}/${BINARY_NAME} ${BUILD_DIR}/${BINARY_NAME}.bin
 '''
 
 [tasks.objdump]
 dependencies = ["build"]
 script = '''
-rust-objdump --source --all-headers --demangle --line-numbers --wide ${BUILD_DIR}/${BINARY_NAME} > ${BUILD_DIR}/${BINARY_NAME}.lst
+${OBJDUMP} ${DEBUG_FLAGS} ${BUILD_DIR}/${BINARY_NAME} > ${BUILD_DIR}/${BINARY_NAME}.lst
 '''
 
 [tasks.all]

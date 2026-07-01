@@ -17,6 +17,8 @@ RUN apt-get update \
     ca-certificates \
     build-essential \
     qemu-system-misc \
+    gcc-riscv64-unknown-elf \
+    binutils-riscv64-unknown-elf \
     && apt-get autoremove -y \
     && apt-get clean -y \
     && rm -rf /var/lib/apt/lists/*
