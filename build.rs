@@ -1,10 +1,10 @@
 use std::process::Command;
 
-const ASM_NAME: &str = "thread";
+const ASM_NAME: &str = "boot";
 
 fn main() {
     let out_dir = std::env::var("OUT_DIR").unwrap();
-    let asm_src = format!("src/{ASM_NAME}.s");
+    let asm_src = format!("src/earth/{ASM_NAME}.s");
 
     let status = Command::new("riscv64-unknown-elf-gcc")
         .args(["-c", "-march=rv32imafc", "-mabi=ilp32f", &asm_src, "-o"])
